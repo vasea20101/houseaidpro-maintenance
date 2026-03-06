@@ -1,0 +1,479 @@
+/* HouseAidPro — Wizard Styles (wizard.css) */
+
+/* ── Progress Stepper ──────────────────────────────────── */
+.wizard-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6) 0;
+    gap: 0;
+    max-width: 700px;
+    margin: 0 auto var(--space-8);
+}
+
+.wizard-step-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+}
+
+.wizard-step-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-sm);
+    border: 2px solid var(--border-color);
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    transition: all var(--transition-base);
+}
+
+.wizard-step-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    font-weight: var(--weight-medium);
+    white-space: nowrap;
+    transition: color var(--transition-base);
+}
+
+.wizard-step-line {
+    flex: 1;
+    height: 3px;
+    background: var(--border-color);
+    min-width: 30px;
+    transition: background var(--transition-base);
+    margin: 0 var(--space-2);
+    margin-bottom: 20px;
+}
+
+.wizard-step-indicator.active .wizard-step-circle {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: var(--color-white);
+    box-shadow: 0 0 0 4px var(--color-primary-bg);
+}
+
+.wizard-step-indicator.active .wizard-step-label {
+    color: var(--color-primary);
+    font-weight: var(--weight-semibold);
+}
+
+.wizard-step-indicator.completed .wizard-step-circle {
+    border-color: var(--color-success);
+    background: var(--color-success);
+    color: var(--color-white);
+}
+
+.wizard-step-indicator.completed .wizard-step-label {
+    color: var(--color-success);
+}
+
+.wizard-step-line.completed {
+    background: var(--color-success);
+}
+
+/* ── Step Panels ───────────────────────────────────────── */
+.wizard-panels {
+    position: relative;
+}
+
+.wizard-panel {
+    display: none;
+    animation: fadeInUp 0.4s ease both;
+}
+
+.wizard-panel.active {
+    display: block;
+}
+
+/* ── Step 1: Category Selection ───────────────────────── */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+}
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-3);
+    background: var(--bg-surface);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: center;
+}
+
+.category-card:hover {
+    border-color: var(--color-primary-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.category-card.selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary-bg);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.category-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
+    transition: all var(--transition-base);
+}
+
+.category-card.selected .category-card__icon {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+.category-card__icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.category-card__label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--text-primary);
+}
+
+/* Area toggle */
+.area-toggle {
+    display: flex;
+    background: var(--bg-surface-hover);
+    border-radius: var(--radius-xl);
+    padding: var(--space-1);
+    gap: var(--space-1);
+    margin-top: var(--space-4);
+}
+
+.area-toggle__btn {
+    flex: 1;
+    padding: var(--space-3);
+    text-align: center;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--text-secondary);
+    border: none;
+    background: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.area-toggle__btn.active {
+    background: var(--color-white);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+[data-theme="dark"] .area-toggle__btn.active {
+    background: var(--color-gray-700);
+}
+
+/* Conditional fields */
+.conditional-fields {
+    margin-top: var(--space-6);
+    padding: var(--space-5);
+    background: var(--bg-surface-hover);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-color);
+    animation: fadeInUp 0.3s ease;
+}
+
+.conditional-fields__title {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-4);
+    color: var(--text-primary);
+}
+
+/* ── Step 2: Upload Zone ──────────────────────────────── */
+.upload-zone {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--space-10) var(--space-6);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    background: var(--bg-surface);
+}
+
+.upload-zone:hover,
+.upload-zone.dragover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-bg);
+}
+
+.upload-zone__icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto var(--space-4);
+    border-radius: 50%;
+    background: var(--color-primary-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+}
+
+.upload-zone__icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.upload-zone__text {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.upload-zone__text strong {
+    color: var(--color-primary);
+}
+
+.upload-zone__hint {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: var(--space-2);
+}
+
+.upload-previews {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+}
+
+.upload-preview {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: var(--bg-surface-hover);
+}
+
+.upload-preview img,
+.upload-preview video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-preview__remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: background var(--transition-fast);
+}
+
+.upload-preview__remove:hover {
+    background: var(--color-danger);
+}
+
+.upload-preview__info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--space-1) var(--space-2);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.upload-preview__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--color-primary);
+    transition: width 0.3s;
+}
+
+.upload-count {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-top: var(--space-3);
+    text-align: center;
+}
+
+/* ── Step 3: Address ──────────────────────────────────── */
+.postcode-lookup {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-end;
+}
+
+.postcode-lookup .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.address-results {
+    margin-top: var(--space-3);
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+}
+
+.address-result {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.address-result:hover {
+    background: var(--color-primary-bg);
+}
+
+.address-result:last-child {
+    border-bottom: none;
+}
+
+.manual-entry-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-primary);
+    cursor: pointer;
+    margin-top: var(--space-3);
+    background: none;
+    border: none;
+    font-family: var(--font-family);
+}
+
+/* ── Step 5: Confirmation ─────────────────────────────── */
+.summary-card {
+    background: var(--bg-surface-hover);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    margin-bottom: var(--space-4);
+}
+
+.summary-card__title {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-3);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-2) 0;
+    font-size: var(--text-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-row__label {
+    color: var(--text-muted);
+}
+
+.summary-row__value {
+    color: var(--text-primary);
+    font-weight: var(--weight-medium);
+    text-align: right;
+    max-width: 60%;
+}
+
+.terms-section {
+    margin-top: var(--space-6);
+    padding: var(--space-5);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+}
+
+.schedule-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+}
+
+/* ── Wizard Navigation ────────────────────────────────── */
+.wizard-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-color);
+}
+
+.wizard-nav .btn {
+    min-width: 140px;
+}
+
+@media (max-width: 768px) {
+    .category-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+
+    .wizard-step-label {
+        display: none;
+    }
+
+    .wizard-step-circle {
+        width: 36px;
+        height: 36px;
+        font-size: var(--text-xs);
+    }
+
+    .schedule-section {
+        grid-template-columns: 1fr;
+    }
+
+    .postcode-lookup {
+        flex-direction: column;
+    }
+
+    .upload-previews {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+}

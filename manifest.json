@@ -1,0 +1,20 @@
+{
+    "name": "HouseAidPro",
+    "short_name": "HouseAid",
+    "description": "Report and track maintenance issues quickly and efficiently.",
+    "start_url": "/maintenance/index.php",
+    "display": "standalone",
+    "background_color": "#0f172a",
+    "theme_color": "#3b72e8",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233b72e8'/><path d='M50 15L20 40v35h20V55h20v20h20V40L50 15z' fill='white'/></svg>",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["utilities", "productivity"],
+    "lang": "en-GB"
+}

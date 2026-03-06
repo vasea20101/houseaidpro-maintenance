@@ -1,0 +1,32 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment / local overrides
+.env
+.env.*
+*.local
+*.local.php
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Runtime data and generated files
+/logs/*.log
+/logs/*.txt
+/uploads/*
+!/uploads/README.md
+!/uploads/.gitkeep
+
+# Caches / temp
+*.tmp
+*.cache
+
+# Test artifacts
+coverage/
+.phpunit.result.cache
