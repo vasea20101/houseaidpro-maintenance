@@ -35,7 +35,20 @@ define('ALLOWED_MIME_TYPES', [
 
 // ── App ─────────────────────────────────────────────────────
 define('APP_NAME', 'HouseAidPro');
-define('APP_URL', 'http://localhost/maintenance');
+
+// Auto-detect app URL to avoid hardcoded localhost/subfolder mismatches.
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$documentRoot = isset($_SERVER['DOCUMENT_ROOT']) ? str_replace('\\', '/', (string) realpath($_SERVER['DOCUMENT_ROOT'])) : '';
+$basePathReal = str_replace('\\', '/', (string) realpath(BASE_PATH));
+$baseUri = '';
+
+if ($documentRoot !== '' && $basePathReal !== '' && stripos($basePathReal, $documentRoot) === 0) {
+    $baseUri = str_replace('\\', '/', substr($basePathReal, strlen($documentRoot)));
+}
+
+$baseUri = rtrim($baseUri, '/');
+define('APP_URL', $scheme . '://' . $host . $baseUri);
 define('APP_VERSION', '1.0.0');
 
 // ── Session ─────────────────────────────────────────────────
