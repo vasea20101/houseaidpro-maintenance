@@ -33,6 +33,7 @@ function registerUser(
     $stmt->execute([$role, $title, $firstName, $surname, $email, $phone, $altPhone, $hash]);
 
     $userId = (int) $db->lastInsertId();
+    session_regenerate_id(true); // prevent session fixation
     $_SESSION['user_id'] = $userId;
     $_SESSION['user_role'] = $role;
 
@@ -51,6 +52,7 @@ function loginUser(string $email, string $password): array
         return ['success' => false, 'message' => 'Invalid email or password.'];
     }
 
+    session_regenerate_id(true); // prevent session fixation
     $_SESSION['user_id'] = (int) $user['id'];
     $_SESSION['user_role'] = $user['role'];
     $_SESSION['user_name'] = $user['first_name'] . ' ' . $user['surname'];

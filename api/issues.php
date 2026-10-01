@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $body['action'] ?? $action;
 
     if ($action === 'update_status') {
+        apiRequireRole(['admin']);
         $issueId = (int) ($body['issue_id'] ?? 0);
         $status = $body['status'] ?? '';
         $valid = ['new', 'acknowledged', 'scheduled', 'in_progress', 'completed', 'closed'];
@@ -47,7 +48,7 @@ switch ($action) {
         break;
 
     case 'all':
-        // Admin only in production; for now allow all
+        apiRequireRole(['admin']);
         $stmt = $db->query(
             'SELECT i.*, ic.name AS category_name,
                     u.first_name, u.surname,

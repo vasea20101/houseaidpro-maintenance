@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $body['action'] ?? $action;
 
     if ($action === 'assign') {
+        apiRequireRole(['admin']);
         $issueId = (int) ($body['issue_id'] ?? 0);
         $contractorId = (int) ($body['contractor_id'] ?? 0);
         if (!$issueId || !$contractorId)
@@ -26,20 +27,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'accept') {
+        apiRequireRole(['contractor']);
         $assignmentId = (int) ($body['assignment_id'] ?? 0);
-        $stmt = $db->prepare('UPDATE contractor_assignments SET status = "accepted", accepted_at = NOW() WHERE id = ?');
-        $stmt->execute([$assignmentId]);
+        $stmt = $db->prepare(
+            'UPDATE contractor_assignments SET status = "accepted", accepted_at = NOW()
+             WHERE id = ? AND contractor_id = (SELECT id FROM contractors WHERE user_id = ?)'
+        );
+        $stmt->execute([$assignmentId, $_SESSION['user_id']]);
         jsonResponse(['success' => true]);
     }
 
     if ($action === 'complete') {
+        apiRequireRole(['contractor']);
         $assignmentId = (int) ($body['assignment_id'] ?? 0);
-        $stmt = $db->prepare('UPDATE contractor_assignments SET status = "completed", completed_at = NOW() WHERE id = ?');
-        $stmt->execute([$assignmentId]);
+        $stmt = $db->prepare(
+            'UPDATE contractor_assignments SET status = "completed", completed_at = NOW()
+             WHERE id = ? AND contractor_id = (SELECT id FROM contractors WHERE user_id = ?)'
+        );
+        $stmt->execute([$assignmentId, $_SESSION['user_id']]);
         jsonResponse(['success' => true]);
     }
 }
 
-// GET: list contractors
+// GET: list contractors (includes emails, so admin only)
+apiRequireRole(['admin']);
 $stmt = $db->query('SELECT c.*, u.first_name, u.surname, u.email FROM contractors c JOIN users u ON c.user_id = u.id ORDER BY c.rating_avg DESC');
 jsonResponse(['success' => true, 'contractors' => $stmt->fetchAll()]);

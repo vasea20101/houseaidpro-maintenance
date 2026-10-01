@@ -11,6 +11,7 @@ Thumbs.db
 .env.*
 *.local
 *.local.php
+/includes/config.php
 
 # Dependencies
 /vendor/
@@ -22,6 +23,7 @@ Thumbs.db
 /uploads/*
 !/uploads/README.md
 !/uploads/.gitkeep
+!/uploads/.htaccess
 
 # Caches / temp
 *.tmp

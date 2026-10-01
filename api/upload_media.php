@@ -17,6 +17,19 @@ if (!$issueId) {
 }
 
 $db = getDB();
+
+// Only the issue's owner or an admin may attach media
+apiRequireRole(['tenant', 'homeowner', 'admin']);
+$stmt = $db->prepare('SELECT user_id FROM issues WHERE id = ?');
+$stmt->execute([$issueId]);
+$ownerId = $stmt->fetchColumn();
+if ($ownerId === false) {
+    jsonResponse(['success' => false, 'message' => 'Issue not found.'], 404);
+}
+if (!isAdmin() && (int) $ownerId !== (int) $_SESSION['user_id']) {
+    jsonResponse(['success' => false, 'message' => 'Access denied.'], 403);
+}
+
 $uploadDir = BASE_PATH . '/uploads/' . $issueId . '/';
 if (!is_dir($uploadDir))
     mkdir($uploadDir, 0755, true);
@@ -31,12 +44,12 @@ if (!empty($_FILES['file'])) {
     if ($file['size'] > MAX_UPLOAD_SIZE) {
         jsonResponse(['success' => false, 'message' => 'File too large. Max ' . (MAX_UPLOAD_SIZE / 1024 / 1024) . 'MB.'], 400);
     }
-    if (!in_array($file['type'], ALLOWED_MIME_TYPES)) {
+    $checked = validateUpload($file['tmp_name'], (int) $file['size']);
+    if ($checked === null) {
         jsonResponse(['success' => false, 'message' => 'File type not allowed.'], 400);
     }
 
-    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-    $safeName = uniqid('media_') . '.' . $ext;
+    $safeName = $checked['name'];
     $dest = $uploadDir . $safeName;
 
     if (move_uploaded_file($file['tmp_name'], $dest)) {
@@ -44,7 +57,7 @@ if (!empty($_FILES['file'])) {
             'INSERT INTO issue_media (issue_id, file_name, original_name, file_path, file_type, file_size)
              VALUES (?, ?, ?, ?, ?, ?)'
         );
-        $stmt->execute([$issueId, $safeName, $file['name'], 'uploads/' . $issueId . '/' . $safeName, $file['type'], $file['size']]);
+        $stmt->execute([$issueId, $safeName, $file['name'], 'uploads/' . $issueId . '/' . $safeName, $checked['mime'], $file['size']]);
         $uploaded[] = ['id' => (int) $db->lastInsertId(), 'name' => $file['name']];
     }
 }

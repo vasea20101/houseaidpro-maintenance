@@ -88,3 +88,40 @@ function sendNotification(int $userId, string $type, string $subject, string $me
     );
     file_put_contents(BASE_PATH . '/logs/notifications.log', $logLine, FILE_APPEND | LOCK_EX);
 }
+
+/**
+ * Validate an uploaded file and build a safe stored name.
+ * The MIME type is read from the file contents (finfo), not the client header,
+ * and the extension comes from ALLOWED_MIME_TYPES, never from the user's filename.
+ * Returns ['mime' => ..., 'name' => ...] or null if the file is not allowed.
+ */
+function validateUpload(string $tmpPath, int $size): ?array
+{
+    if ($size <= 0 || $size > MAX_UPLOAD_SIZE || !is_uploaded_file($tmpPath)) {
+        return null;
+    }
+
+    $mime = (new finfo(FILEINFO_MIME_TYPE))->file($tmpPath);
+    $ext = ALLOWED_MIME_TYPES[$mime] ?? null;
+    if ($ext === null) {
+        return null;
+    }
+
+    return [
+        'mime' => $mime,
+        'name' => 'media_' . bin2hex(random_bytes(16)) . '.' . $ext,
+    ];
+}
+
+/**
+ * API guard: stop with a JSON 401/403 unless the user is logged in with one of the given roles.
+ */
+function apiRequireRole(array $roles): void
+{
+    if (!isLoggedIn()) {
+        jsonResponse(['success' => false, 'message' => 'Login required.'], 401);
+    }
+    if (!in_array($_SESSION['user_role'] ?? '', $roles, true)) {
+        jsonResponse(['success' => false, 'message' => 'Access denied.'], 403);
+    }
+}

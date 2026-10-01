@@ -100,15 +100,12 @@ if (!empty($_FILES['files'])) {
     foreach ($_FILES['files']['name'] as $i => $name) {
         if ($_FILES['files']['error'][$i] !== UPLOAD_ERR_OK)
             continue;
-        if ($_FILES['files']['size'][$i] > MAX_UPLOAD_SIZE)
+        $checked = validateUpload($_FILES['files']['tmp_name'][$i], (int) $_FILES['files']['size'][$i]);
+        if ($checked === null)
             continue;
 
-        $mime = $_FILES['files']['type'][$i];
-        if (!in_array($mime, ALLOWED_MIME_TYPES))
-            continue;
-
-        $ext = pathinfo($name, PATHINFO_EXTENSION);
-        $safeName = uniqid('media_') . '.' . $ext;
+        $mime = $checked['mime'];
+        $safeName = $checked['name'];
         $dest = $uploadDir . $safeName;
 
         if (move_uploaded_file($_FILES['files']['tmp_name'][$i], $dest)) {
