@@ -7,6 +7,22 @@ A full-stack PHP/MySQL web app for reporting and tracking property maintenance i
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?logo=javascript&logoColor=black)
 [![PHP CI](https://github.com/vasea20101/houseaidpro-maintenance/actions/workflows/php-ci.yml/badge.svg)](https://github.com/vasea20101/houseaidpro-maintenance/actions/workflows/php-ci.yml)
 
+## Screenshots
+
+| Home | Report wizard |
+|------|---------------|
+| ![Home page](docs/screenshots/home.png) | ![Report an issue wizard](docs/screenshots/report.png) |
+
+| Tenant dashboard | Admin dashboard |
+|------------------|-----------------|
+| ![Tenant dashboard](docs/screenshots/tenant-dashboard.png) | ![Admin dashboard](docs/screenshots/admin-dashboard.png) |
+
+| Contractor portal |
+|-------------------|
+| ![Contractor portal](docs/screenshots/contractor-portal.png) |
+
+<sub>Screenshots use sample data.</sub>
+
 ## Features
 
 - **Issue reporting wizard** – step-by-step form with UK postcode lookup ([postcodes.io](https://postcodes.io)), priority (low → emergency), private/communal area, and photo/video/audio uploads.
@@ -15,7 +31,7 @@ A full-stack PHP/MySQL web app for reporting and tracking property maintenance i
 - **Role-based dashboards**
   - *Tenant* – view your own issues and their status.
   - *Admin* – view all issues and update their status (new → acknowledged → scheduled → in progress → completed → closed).
-  - *Contractor* – portal for assigned jobs (accept / complete).
+  - *Contractor* – job portal UI (accept, progress updates, completion photo); the accept/complete API endpoints are built, wiring them into the page is next.
 - **JSON API endpoints** – `auth`, `issues`, `contractors`, `notifications`, `submit_issue`, `upload_media`.
 - **In-app notifications** – stored in the database and written to `logs/notifications.log` (email/SMS sending is not implemented yet).
 - **Installable PWA basics** – web app manifest and a service worker that caches static assets.
